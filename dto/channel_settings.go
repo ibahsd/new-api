@@ -13,6 +13,9 @@ type ChannelSettings struct {
 	PassThroughBodyEnabled bool   `json:"pass_through_body_enabled,omitempty"`
 	SystemPrompt           string `json:"system_prompt,omitempty"`
 	SystemPromptOverride   bool   `json:"system_prompt_override,omitempty"`
+	// ArtinSmart 市场: per-channel 计费折扣(§7 买家付实走线路挂牌价)。route-syncer 按各渠道 discount 写入;
+	// >0 时最终扣费按其缩放, 未设(0)=不变→现有非市场渠道零影响。
+	MktRatio float64 `json:"mkt_ratio,omitempty"`
 }
 
 type VertexKeyType string

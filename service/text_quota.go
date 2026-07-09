@@ -346,6 +346,14 @@ func PostTextConsumeQuota(ctx *gin.Context, relayInfo *relaycommon.RelayInfo, us
 		}
 	}
 
+	// ArtinSmart 市场 per-channel 计费(§7): 渠道 setting.mkt_ratio>0 时最终扣费按其折扣缩放,
+	// 买家按实走线路的挂牌价付费; 未设(0)=不变→非市场渠道(DCIM等)零影响。
+	if mr := relayInfo.ChannelSetting.MktRatio; mr > 0 && mr != 1.0 {
+		summary.Quota = int(decimal.NewFromInt(int64(summary.Quota)).Mul(decimal.NewFromFloat(mr)).IntPart())
+		if summary.Quota < 0 {
+			summary.Quota = 0
+		}
+	}
 	if summary.WebSearchCallCount > 0 {
 		extraContent = append(extraContent, fmt.Sprintf("Web Search 调用 %d 次，调用花费 %s", summary.WebSearchCallCount, decimal.NewFromFloat(summary.WebSearchPrice).Mul(decimal.NewFromInt(int64(summary.WebSearchCallCount))).Div(decimal.NewFromInt(1000)).Mul(decimal.NewFromFloat(summary.GroupRatio)).Mul(decimal.NewFromFloat(common.QuotaPerUnit)).String()))
 	}
