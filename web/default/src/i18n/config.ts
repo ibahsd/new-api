@@ -52,6 +52,9 @@ i18n
     detection: {
       order: ['localStorage'],
       caches: ['localStorage'],
+      // Fresh storage key so language preferences cached under the old
+      // navigator-based detection (often "en") do not override the zh default.
+      lookupLocalStorage: 'artin_lng',
     },
   })
 
