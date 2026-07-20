@@ -62,9 +62,10 @@ export function useTopNavLinks(): TopNavLink[] {
 
   const links: TopNavLink[] = []
 
-  // Home
+  // Home: full page load so the web server can route "/" per domain
+  // (www serves the marketing portal, not the SPA home).
   if (modules?.home !== false) {
-    links.push({ title: t('Home'), href: '/' })
+    links.push({ title: t('Home'), href: '/', external: true })
   }
 
   // Console -> /dashboard (new console path)
